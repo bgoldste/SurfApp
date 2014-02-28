@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="../../assets/ico/favicon.ico">
+
+    <title>El Porto</title>
+
+    <!-- Bootstrap core CSS -->
+    {% load staticfiles %}
+    <link href="{% static "surfdata/css/bootstrap.min.css" %}" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link href="{% static "surfdata/css/grid.css" %}" rel="stylesheet">
+
+    <!-- Just for debugging purposes. Don't actually copy this line! -->
+    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  <style type="text/css"></style></head>
+
+  <body>
+
+
+
+
+
+
+      <div class="jumbotron">
+          
+
+          
+        <table class="table table-stiped">  
+        <thead>  
+          <tr>  
+            <th>Date</th>  
+            <th>Wind</th>  
+            <th>Wave</th>  
+             
+          </tr>  
+        </thead>  
+        <tbody>  
+
+          <tr>  
+            <td>{{c|slice:"1"}}</td>  
+            <td>{{current_wind_dir}} degrees, {{current_wind_speed}} m/s</td>  
+            <td>{{current_wave_dir}} degrees, {{current_wave_height}} meters, {{current_wave_per}} seconds</td> 
+          </tr>  
+         
+          
+           {% for item in n %}
+          <tr>
+            <td>{{item}}</td>
+            <td>{{item.wind_dir}} degrees, {{item.wind_speed}} m/s</td>
+            <td> {{item}}  </td>
+          </tr>  
+         {% endfor  %}
+         
+         
+        </tbody>  
+      </table>  
+      </div>
+
+        <p> asdasdasd {{c.0}}</p>
+
+    
+
+
+
+
+
+
+
+
+
+
+    <div class="container">
+
+      <div class="page-header">
+        <h1>El Porto</h1>
+        <p class="lead"> {{youtube_key}} it means mermaid in spanish
+          {{youtube_title}}</p>
+      </div>
+
+     
+      <div class="row">
+        <div class="span9">
+        <div style="text-align:center" class="col-md-4">Wind</div>
+        <div style="text-align:center"class="col-md-4">Wave</div>
+        <div style="text-align:center" class="col-md-4">Date</div>
+
+    
+      </div>
+        
+        
+        <div class="row"></div>
+         <div class="span3"> <div style="text-align:center" class="col-md-4">{{current_wind_speed}} m/s, at {{current_wind_dir}} degrees</div></div>
+          <div class="span3"> <div style="text-align:center" class="col-md-4">{{current_wave_height}} ft, at {{current_wave_dir}} degrees, {{current_wave_per}} second</div></div>
+          <div class="span3"><div style="text-align:center" class="col-md-4">{{date}}</div></div>
+
+             <div class="row"></div>
+         <div class="span3"> <div style="text-align:center" class="col-md-4">{{current_wind_speed}} m/s, at {{current_wind_dir}} degrees</div></div>
+          <div class="span3"> <div style="text-align:center" class="col-md-4">{{current_wave_height}} ft, at {{current_wave_dir}} degrees, {{current_wave_per}} second</div></div>
+          <div class="span3"><div style="text-align:center" class="col-md-4">{{date}}</div></div>
+
+      </div>
+
+
+        <p>{{youtube_date}}</p>
+        <div style="text-align:center;">
+        <iframe width="560" height="315" src="//www.youtube.com/embed/{{youtube_key}}" frameborder="0" allowfullscreen></iframe> 
+      </div>
+
+          <h1>Previous Conditions</h1>
+        <div class="row">
+        <div style="text-align:center" class="col-md-4">Wind</div>
+        <div style="text-align:center"class="col-md-4">Wave</div>
+        <div style="text-align:center" class="col-md-4">Date</div>
+        
+        <div class="row"></div>
+          <div style="text-align:center" class="col-md-4">{{last_wind_speed}} m/s at {{last_wind_dir}}</div>
+          <div style="text-align:center" class="col-md-4">{{last_wave_height}} meters, {{last_wave_per}} seconds, {{last_wave_dir}} degrees</div>
+          <div style="text-align:center" class="col-md-4">{{last_wave_date}}</div>
+
+      </div>
+
+
+
+   
+
+
+
+    </div> <!-- /container -->
+    <div></div>
+
+   
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    {% load staticfiles %}
+    <script type ="text/javascript" src="{% static "surfdata/jquery.js" %}"></script>
+    {% load staticfiles %}
+    <script src="{% static "surfdata/js/bootstrap.js" %}"></script>
+
+</body></html>
