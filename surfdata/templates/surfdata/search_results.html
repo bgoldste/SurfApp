@@ -1,0 +1,57 @@
+
+
+<html lang="en"><head>
+ 
+
+  <body style="">
+
+ <form action="/search/" method="get">
+        <input type="text" name="q">
+        <select name="search_parameter">
+        <option value="WDIR">Wind Direction</option>
+        <option value="WSPD">Wind Speed</option>
+        <option value="WVHT">Wave Height</option>
+        <option value="MWD">Wave Direction</option>
+        </select>
+       
+        <input type="submit" value="Search">
+    </form>
+
+  
+
+    <p> You searched for {{search_parameter}}</p>
+
+    <p>{{today}}</p>
+    <P>Total Number of ReportData objects: {{total_objects}}</P>
+<h1> Search Results</h1>
+<table style="width:700px">
+<tr>
+  <td>Date</td>
+  <td>Wind Dir</td>
+  <td>Wind Speed</td> 
+  <td>Wave Height</td>
+  <td>Wave Dir</td>
+</tr>
+
+
+{% for item in objects %}
+<tr>
+  <td>{{item.date}}</td>
+  <td>{{item.WDIR}}</td> 
+  <td>{{item.WSPD}}</td>
+  <td>{{item.WVHT}}</td>
+  <td>{{item.MWD}}</td>
+  </tr>
+  {% endfor %}
+  </table>
+  
+
+  
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    {% load staticfiles %}
+  
+
+</body></html>
