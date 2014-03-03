@@ -1,82 +1,70 @@
 from django.core.management.base import BaseCommand, CommandError
-from surfdata.models import wind_data, wave_data
+from surfdata.models import ReportData
 import urllib
 from django.utils import timezone
 import datetime
 from django.utils.timezone import utc
 
-# To do- close files. Add precautions if
 
-"""class reader(object):
-	#reads data from .txt file into parameters , and saves to db
-	#todo - stop hardcoding url in
-	print "error"
-	file2 = urllib.urlretrieve('http://www.ndbc.noaa.gov/data/realtime2/ICAC1.txt','textfile.txt')
-	file = open('textfile.txt', 'r')
-	headings = file.readline()
-	parameters = file.readline()
-	
-	while True:
-		data = file.readline()
-		if not data: break
-
-		data = data.split()
-		date =  datetime.datetime(year = int(data[0]), month = int(data[1]), day = int(data[2]), hour = int(data[3]), minute = int(data[4]) ).replace(tzinfo=utc)	
-		
-		if (data[5]=='MM' ):
-			data[5] = None
-		if (data[6] =='MM'):
-			data[6] = None											
-		x = wind_data(date = date, wind_dir = data[5], wind_speed = data[6])
-		x.save()
-		print x
-		"""
 
 class reader2(object):
 	#reads data from .txt file into parameters , and saves to db
 	#todo - stop hardcoding url in
-	file2 = urllib.urlretrieve('http://www.ndbc.noaa.gov/data/5day2/42012_5day.txt','textfile2.txt')
+	file2 = urllib.urlretrieve('http://www.ndbc.noaa.gov/view_text_file.php?filename=42012h2013.txt.gz&dir=data/historical/stdmet/','textfile2.txt')
 	file = open('textfile2.txt', 'r')
+	#read first 2 lines -- data does not start until ln3
 	headings = file.readline()
 	parameters = file.readline()
-	print "hello"
+	objects_added = 0
 	
 	while True:
+		#why does this work
+		#reads 1 line, while there are lines to read
 		data = file.readline()
 		if not data: break
 
+		#convert string into list
 		data = data.split()
-		date =  datetime.datetime(year = int(data[0]), month = int(data[1]), day = int(data[2]), hour = int(data[3]), minute = int(data[4]) ).replace(tzinfo=utc)	
+
+		#iterate through list and turn any missing values of MM into None 
+		for d  in range(len(data)):
+			if data[d] == 'MM':
+				data[d] = None
+			if data[d] == 99.00:
+				data[d] = None
+				print "setting to none, equal to 99.00"
+			if data[d] == 999.00:
+				data[d] = None
+				print "setting to none, equal to 99.00"
+			if data[d] == 999:
+				data[d] = None
+				print "setting to none, equal to 99.00"
+			if data[d] == 99.0:
+				data[d] = None
+				print "setting to none, equal to 99.00"
+		#convert to datetime object
+		date1 =  datetime.datetime(year = int(data[0]), month = int(data[1]), day = int(data[2]), hour = int(data[3]), minute = int(data[4]) ).replace(tzinfo=utc)	
 		#why can i save this as a string if model calls for integer
-		if (data[8]=='MM' ):
-			data[8] = None
-		if (data[9] =='MM'):
-			data[9] = None	
-		if (data[10] =='MM'):
-			data[10] = None	
-		if (data[11] =='MM'):
-			data[11] = None	
 
-		if (data[5]=='MM' ):
-			data[5] = None
-		if (data[6] =='MM'):
-			data[6] = None											
-		y = wind_data(date = date, wind_dir = data[5], wind_speed = data[6])
-		y.save()																																																								
-		#Model.objects.get_or_create(field="")
-		x = wave_data(date = date, wave_height = data[8], wave_per = data[10], wave_dir= data[11])
-		x.save()
-		
-
-		print x.wave_per
-
+		#only write new date if doesn't aready exist
+		if ReportData.objects.filter(date = date1):
+			print "Object already exists for this date"
+		#YY0  MM DD hh mm WDIR WSPD GST  WVHT   DPD   APD MWD   PRES  ATMP  WTMP  DEWP  VIS PTDY  TIDE
+		else:			
+			y = ReportData(date = date1, WDIR = data[5], WSPD = data[6], WVHT = data[8], DPD = data[9], APD = data[10], MWD = data[11], ATMP = data[12], WTMP = data[13]) # TIDE = data[18])
+			y.save()	
+			print "Object added:", y.date, y.WDIR, y.WSPD	
+			objects_added += 1																																																				
+	
+	file.close()
+	print ("%d objects added to database" % objects_added)
+   
 		
 	
 class Command(BaseCommand):
     
-    help = 'Help text goes here'
+    help = 'Read in most recent data from noaa site, and add to database.'
 
     def handle(self, **options):
-    	print "start"
+    	print "Custom Command Run Succesfully. Booyah!"
 		
-print len(wind_data.objects.all())
